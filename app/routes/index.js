@@ -30,7 +30,11 @@ const users = [
 ];
 
 router.get('/login', (req, res) => {
-  res.render('login')
+  if (req.cookies.username) {
+    res.render('treasure', { currentUser: req.cookies.username })
+  } else {
+    res.render('login')
+  }
 });
 
 router.get('/signup', (req, res) => {
