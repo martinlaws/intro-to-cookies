@@ -2,8 +2,8 @@
 
 ### HTTP
 Two most important parts of a request:
-1. 
-2. 
+1. How
+2. What
 
 Statelessness
 
