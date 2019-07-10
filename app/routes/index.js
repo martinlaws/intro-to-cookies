@@ -31,7 +31,7 @@ const users = [
 
 router.get('/login', (req, res) => {
   if (req.cookies.username) {
-    res.render('treasure', { currentUser: req.cookies.username })
+    res.redirect('/treasure')
   } else {
     res.render('login')
   }
@@ -41,15 +41,26 @@ router.get('/signup', (req, res) => {
   res.render('signup')
 });
 
-router.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  const user = users.find(user => user.username === username && user.password === password)
+router.get(`/treasure`, (req, res) => {
+  const username  = req.cookies.username;
+  const user = users.find(user => user.username === username);
 
   if (user) {
-    res.cookie('username', user.username)
-    res.render('treasure', { currentUser: user.username })
+    res.render('treasure', { currentUser: user.username });
   } else {
-    res.redirect('/login')
+    res.redirect('/login');
+  }
+});
+
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find(user => user.username === username && user.password === password);
+
+  if (user) {
+    res.cookie('username', user.username);
+    res.redirect('/treasure');
+  } else {
+    res.redirect('/login');
   }
 });
 
