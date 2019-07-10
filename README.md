@@ -64,3 +64,14 @@ This addresses most of the problems outlined above (with one glaring exception).
 ## Demo 1: Language Switcher
 
 ## Demo 2: User Authenication
+
+### Security
+
+Problems with our demo:
+1. Devs/Ops have access to people's passwords (this happened on GSuite recently!) === BAD
+    - Hash passwords
+        - `password: '123'` becomes: `_sesson="aa104ef8b4d64a8d8177e846509439d0"` in an MD5 hash, for example
+        - Don't do this yourself, you aren't a cryptographer
+2. Cookie is not encrypted, which opens us up to ~Man~Person in the Middle attacks (MITM) for all of our requests!
+    - We need HTTPS in order to fully encrypt our requests
+    - `cookie-session` node module encrypts _and signs_ our cookies by default! Yay!
