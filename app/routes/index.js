@@ -37,4 +37,16 @@ router.get('/signup', (req, res) => {
   res.render('signup')
 });
 
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find(user => user.username === username && user.password === password)
+
+  if (user) {
+    res.cookie('username', user.username)
+    res.render('treasure', { currentUser: user.username })
+  } else {
+    res.redirect('/login')
+  }
+});
+
 module.exports = router;
