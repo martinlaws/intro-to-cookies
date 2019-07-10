@@ -22,4 +22,19 @@ router.get('/lang/french', function(req, res, next) {
   res.redirect('/');
 });
 
+const users = [
+  {
+    username: 'mlaws',
+    password: '123'
+  }
+];
+
+router.get('/login', (req, res) => {
+  res.render('login')
+});
+
+router.get('/signup', (req, res) => {
+  res.render('signup')
+});
+
 module.exports = router;
