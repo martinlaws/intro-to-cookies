@@ -37,16 +37,20 @@ Example:
 12. Server finds correct user object and responds with `profile.ejs`, and we make sure to interpolate `?username=mlaws` to every link in our app (what a pain)
 
 ```javascript
+const usersDB = [{ username: 'mlaws', password: '123' }]
+const { username } = req.params
+const user = usersDB.find(user => user.username === username)
+
 <% if (currentUser) { %>
   <a href="/?username=<%= currentUser.username %>">HOME</a>
 <% } else { %>
-  <a href="/>">HOME</a>
+  <a href="/login">Log In</a>
 <% } %>
 ```
 
 **Problems with this approach:**
 - Security: 
-    - Very easy to brute force quess usernames and impersonate someone
+    - Very easy to brute force guess usernames and impersonate someone
     - Sharing URLs means sharing your logged in state
 - Usability:
     - Closing tab/window will log me out (unless I go back to URL with query string)

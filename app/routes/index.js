@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   if (req.cookies.language === 'english') {
     res.render('english')
   } else if (req.cookies.language === 'french') {
@@ -12,25 +12,37 @@ router.get('/', function(req, res, next) {
   }
 });
 
-router.get('/lang/english', function(req, res, next) {
+router.get('/lang/english', (req, res, next) => {
   res.cookie('language', 'english');
   res.redirect('/');
 });
 
-router.get('/lang/french', function(req, res, next) {
+router.get('/lang/french', (req, res, next) => {
   res.cookie('language', 'french');
   res.redirect('/');
 });
 
+router.get('/logout', (req, res) => {
+  // res.cookie('language', '')
+  res.clearCookie('language')
+
+  res.redirect('/')
+})
+
 const users = [
-  {
+ {
     username: 'mlaws',
-    password: '123'
+    password: '123',
+    admin: false
   }
 ];
 
+const findUser = username => users.find(user => user.username === username)
+
+const validateUser = (username, password) => users.find(user => user.username === username && user.password === password);
+
 router.get('/login', (req, res) => {
-  if (req.cookies.username) {
+  if (findUser(req.cookies.username)) {
     res.redirect('/treasure')
   } else {
     res.render('login')
@@ -43,10 +55,10 @@ router.get('/signup', (req, res) => {
 
 router.get(`/treasure`, (req, res) => {
   const username  = req.cookies.username;
-  const user = users.find(user => user.username === username);
+  const user = findUser(username);
 
   if (user) {
-    res.render('treasure', { currentUser: user.username });
+    res.render('treasure', { currentUser: user });
   } else {
     res.redirect('/login');
   }
@@ -54,10 +66,9 @@ router.get(`/treasure`, (req, res) => {
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
-  const user = users.find(user => user.username === username && user.password === password);
 
-  if (user) {
-    res.cookie('username', user.username);
+  if (validateUser(username, password)) {
+    res.cookie('username', username);
     res.redirect('/treasure');
   } else {
     res.redirect('/login');
